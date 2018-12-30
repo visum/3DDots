@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Babylon Template</title>
+    <link rel="stylesheet" href="styles.css" />
+    <script src="https://cdn.babylonjs.com/babylon.js"></script>
+    <script src="https://preview.babylonjs.com/loaders/babylonjs.loaders.min.js"></script>
+    <script src="DotClock.js"></script>
+    <script src="DotFactory.js"></script>
+  </head>
+
+  <body>
+    <canvas id="renderCanvas" touch-action="none"></canvas>
+
+    <script>
+      var canvas = document.getElementById("renderCanvas");
+      var engine = new BABYLON.Engine(canvas, true);
+
+      // scene
+      var scene = new BABYLON.Scene(engine);
+      scene.clearColor = new BABYLON.Color3(0,0,0);
+
+      // camera
+      var camera = new BABYLON.ArcRotateCamera(
+        "Camera",    // name
+        1.940144,    // alpha
+        2.926856,    // beta
+        20,          // radius
+        new BABYLON.Vector3(0, 0, 3), // target
+        scene
+      );
+
+      camera.attachControl(canvas, true);
+
+      // light
+      var light1 = new BABYLON.HemisphericLight(
+        "light1",
+        new BABYLON.Vector3(2, 1, 1),
+        scene
+      );
+
+      // clock stuff
+      var dotFactory = new DotFactory({Babylon:BABYLON, scene: scene});
+      var dotClock = new DotClock({dotCount:1500, dotFactory:dotFactory, radiusMultiplier: 0.03});
+
+      dotClock.update();
+
+      engine.runRenderLoop(function() {
+        dotClock.update();
+        scene.render();
+      });
+
+      window.addEventListener("resize", function() {
+        engine.resize();
+      });
+      
+    </script>
+  </body>
+</html>
